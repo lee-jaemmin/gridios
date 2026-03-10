@@ -1,0 +1,71 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+build/
+.dart_tool/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+# Android Release Signing (보안 중요)
+android/key.properties
+android/app/*.jks
+android/app/*.keystore
+android/app/google-services.json
+# Firebase 설정 파일 (유출 주의)
+ios/Runner/GoogleService-Info.plist
+android/app/google-services.json
+
+# 환경 변수 파일 (API 키, DB 비밀번호 등)
+.env
+*.env
+*.key
+*.pem
+
+# 맥 OS 시스템 파일
+.DS_Store
+
+# Xcode 개인 설정
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
