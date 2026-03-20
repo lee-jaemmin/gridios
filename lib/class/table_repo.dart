@@ -103,7 +103,7 @@ class TableRepository {
   }
 
   /// [OUT] Out table
-  Future<void> clearTable(String company, String tid) async {
+  Future<void> clearTable(String company, String tid, String outStaff) async {
     // 1. 해당 테이블의 현재 데이터를 먼저 가져와 groupid 확인
     final doc = await _tableCol(company).doc(tid).get();
     final data = doc.data();
@@ -116,6 +116,7 @@ class TableRepository {
       'bottle': data['bottle'],
       'persons': data['persons'],
       'staff': data['staff'],
+      'outstaff': outStaff,
       'remark': data['remark'],
       'outat': FieldValue.serverTimestamp(), // 아웃 시점 기록
     };
@@ -220,7 +221,7 @@ class TableRepository {
         'phonenumber': fromTable.phonenumber,
         'staff': fromTable.staff,
         'bottle': fromTable.bottle,
-        'remark': fromTable.remark,
+        'remark': "${fromTable.tablename}번에서 이동",
         'persons': fromTable.persons,
         'updatedat': FieldValue.serverTimestamp(),
       });
