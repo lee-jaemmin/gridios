@@ -69,3 +69,6 @@ android/app/google-services.json
 *.mode2v3
 *.perspectivev3
 xcuserdata/
+
+# Firebase config
+lib/firebase_options.dart
