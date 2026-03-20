@@ -160,10 +160,17 @@ class ReregisterTableGridView extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('취소', style: TextStyle(color: Colors.grey)),
+            child: const Text('취소', style: TextStyle(color: Colors.black)),
           ),
           ElevatedButton(
             onPressed: () async {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
               try {
                 // [핵심] 기존 정보를 새 테이블에 등록
                 await _repo.registerBottleKeep(
@@ -174,10 +181,11 @@ class ReregisterTableGridView extends StatelessWidget {
                   staff: historyData['staff'] ?? '',
                   persons: historyData['persons'] ?? 0,
                   bottle: historyData['bottle'] ?? '',
-                  remark: '${historyData['remark'] ?? ''} (재등록)', // 재등록 흔적 남김
+                  remark: '${historyData['tablename'] ?? ''}번 재등록', // 재등록 흔적 남김
                 );
 
                 if (context.mounted) {
+                  Navigator.pop(context); // 프로그레스바 닫기
                   Navigator.pop(context); // 다이얼로그 닫기
                   Navigator.pop(context); // ReregisterScreen 닫기
                   Navigator.pop(context); // HistoryBottomSheet 닫기

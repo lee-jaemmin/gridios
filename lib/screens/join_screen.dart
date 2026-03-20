@@ -117,6 +117,12 @@ class _JoinScreenState extends State<JoinScreen> {
       return;
     }
 
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
     try {
       final checkSnapshot = await FirebaseFirestore.instance
           .collection('company')
@@ -135,6 +141,7 @@ class _JoinScreenState extends State<JoinScreen> {
 
       if (hasConflict) {
         if (!mounted) return;
+        Navigator.pop(context); // 프로그레스바 닫기
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -143,8 +150,8 @@ class _JoinScreenState extends State<JoinScreen> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  Navigator.pop(context); // 이 팝업 해제
+                  Navigator.pop(context); // 메인 화면으로
                 },
                 child: const Text('확인'),
               ),
@@ -170,10 +177,12 @@ class _JoinScreenState extends State<JoinScreen> {
       );
 
       if (mounted) {
-        Navigator.pop(context);
+        Navigator.pop(context); // 프로그레스바 닫기
+        Navigator.pop(context); // 메인 화면으로 
       }
     } catch (e) {
       print('Join Error: $e');
+      Navigator.pop(context); // 프로그레스바 닫기
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('오류가 발생했습니다: $e')),

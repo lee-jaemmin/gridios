@@ -161,15 +161,23 @@ class MoveTableGridView extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () async {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) =>
+                    const Center(child: CircularProgressIndicator()),
+              );
               try {
                 await _repo.moveTable(companyId, fromTable, targetTable.tid);
 
                 if (context.mounted) {
+                  Navigator.pop(context); // 프로그레스바 닫기
                   Navigator.pop(context); // 다이얼로그 닫기
                   Navigator.pop(context); // 이동 화면 닫기
                 }
               } catch (e) {
                 if (context.mounted) {
+                  Navigator.pop(context); // 프로그레스바 닫기
                   Navigator.pop(context); // 다이얼로그 닫기
 
                   // 에러 메시지에 따른 스낵바 노출
