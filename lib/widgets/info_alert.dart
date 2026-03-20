@@ -162,11 +162,45 @@ class _TableRegistrationDialogState extends State<InfoAlert> {
                         fit: BoxFit.scaleDown,
                         child: TextButton(
                           onPressed: () async {
-                            await _repo.clearTable(
-                              widget.companyId,
-                              widget.table.tid,
+                            if (widget.table.status != 'inuse') {
+                              Navigator.pop(context); // 정보입력창 닫기
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    '빈 테이블을 아웃 시킬 수 없습니다. 손님을 먼저 등록해주세요.',
+                                  ),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                              return;
+                            }
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
                             );
-                            if (context.mounted) Navigator.pop(context);
+                            try {
+                              await _repo.clearTable(
+                                widget.companyId,
+                                widget.table.tid,
+                                currentUser.username,
+                              );
+                              if (context.mounted) Navigator.pop(context);
+                              if (context.mounted) Navigator.pop(context);
+                            } catch (e) {
+                              if (context.mounted) Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    '인터넷 연결이 불안정하거나 오류가 발생했습니다. 다시 시도해주세요.',
+                                  ),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                              print('아웃 중 에러 발생 $e');
+                            }
                           },
                           child: const Text(
                             '아웃',
@@ -182,7 +216,19 @@ class _TableRegistrationDialogState extends State<InfoAlert> {
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: TextButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            if (widget.table.status != 'inuse') {
+                              Navigator.pop(context); // 정보입력창 닫기
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    '빈 테이블은 이동 시킬 수 없습니다. 손님을 먼저 등록해주세요.',
+                                  ),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                              return;
+                            }
                             Navigator.pop(context); // 현재 알림창 닫기
                             Navigator.push(
                               context,
@@ -215,21 +261,42 @@ class _TableRegistrationDialogState extends State<InfoAlert> {
                                 _phoneController.text.isNotEmpty ||
                                 _remarksController.text.isNotEmpty ||
                                 _personsController.text.isNotEmpty) {
-                              await _repo.registerBottleKeep(
-                                company: widget.companyId,
-                                tid: widget.table.tid,
-                                customer: _nameController.text.trim(),
-                                phonenumber: _phoneController.text.trim(),
-                                staff: _staffController.text.trim(),
-                                persons:
-                                    int.tryParse(
-                                      _personsController.text.trim(),
-                                    ) ??
-                                    0, // 기존 인원 유지
-                                bottle: _bottleController.text.trim(),
-                                remark: _remarksController.text.trim(),
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
                               );
-                              if (context.mounted) Navigator.pop(context);
+                              try {
+                                await _repo.registerBottleKeep(
+                                  company: widget.companyId,
+                                  tid: widget.table.tid,
+                                  customer: _nameController.text.trim(),
+                                  phonenumber: _phoneController.text.trim(),
+                                  staff: currentUser.username,
+                                  persons:
+                                      int.tryParse(
+                                        _personsController.text.trim(),
+                                      ) ??
+                                      0, // 기존 인원 유지
+                                  bottle: _bottleController.text.trim(),
+                                  remark: _remarksController.text.trim(),
+                                );
+                                if (context.mounted) Navigator.pop(context);
+                                if (context.mounted) Navigator.pop(context);
+                              } catch (e) {
+                                if (context.mounted) Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      '인터넷 연결이 불안정하거나 오류가 발생했습니다. 다시 시도해주세요.',
+                                    ),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                                print('등록 중 오류 발생 $e');
+                              }
                             }
                           },
                           child: const Text('등록'),
