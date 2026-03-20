@@ -83,7 +83,7 @@ class HistoryGridView extends StatelessWidget {
                             '손님: ${h['customer']} (${h['persons']}명)',
                           ),
                           subtitle: Text(
-                            '구매 목록: ${h['bottle']}\n스태프: ${h['staff']}\n비고: ${h['remark']}',
+                            '구매 목록: ${h['bottle']}\n전화 번호: ${h['phonenumber']}\n아웃 스태프: ${h['outstaff']}\n비고: ${h['remark']}',
                           ),
                           trailing: ElevatedButton(
                             onPressed: () => Navigator.push(
